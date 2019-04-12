@@ -1,0 +1,43 @@
+/**
+ * Node import
+ */
+import fs from 'fs';
+import path from 'path';
+
+/**
+ * Npm import
+ */
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const publicKeyPath = path.join(__dirname, 'keys', 'public.pem');
+const privateKeyPath = path.join(__dirname, 'keys', 'private.pem');
+
+/**
+ * Config
+ */
+const config =  {
+  development: {
+    mongodb_uri: "",
+    app_port: 8080,
+    hostname: '',
+    mailer_url: '',
+    jwt_key_passphrase: '',
+    jwt_private_key: fs.readFileSync(privateKeyPath),
+    jwt_public_key: fs.readFileSync(publicKeyPath),
+  },
+  production: {
+    env: 'prod',
+  }
+}
+const env = process.env.NODE_ENV;
+const exportedConfig = config[env] ? config[env] : config.production;
+
+
+/**
+ * Export
+ */
+export default exportedConfig;
+
+
